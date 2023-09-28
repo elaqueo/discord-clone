@@ -12,6 +12,7 @@ export type ModalType =
 
 interface ModalData {
   server?: Server;
+  channelType?: string;
 }
 
 interface ModalStore {

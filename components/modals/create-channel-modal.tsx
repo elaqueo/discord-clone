@@ -32,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   name: z
@@ -46,11 +47,12 @@ const formSchema = z.object({
 });
 
 export const CreateChannelModal = () => {
-  const { isOpen, onClose, type } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
   const params = useParams();
 
   const isModalOpen = isOpen && type === "createChannel";
+  const { channelType } = data;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -59,6 +61,14 @@ export const CreateChannelModal = () => {
       type: "TEXT",
     },
   });
+
+  useEffect(() => {
+    if (channelType) {
+      form.setValue("type", channelType);
+    } else {
+      form.setValue("type", "TEXT");
+    }
+  }, [channelType, form]);
 
   const isLoading = form.formState.isSubmitting;
 
