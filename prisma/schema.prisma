@@ -85,7 +85,7 @@ model Channel {
 
 model Message {
   id      String @id @default(uuid())
-  Content String
+  content String
 
   fileUrl String?
 
@@ -105,8 +105,7 @@ model Message {
 }
 
 model Conversation {
-  id      String @id @default(uuid())
-  Content String
+  id String @id @default(uuid())
 
   memberOneId String
   memberOne   Member @relation("MemberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
@@ -124,7 +123,7 @@ model Conversation {
 
 model DirectMessage {
   id      String  @id @default(uuid())
-  Content String
+  content String
   fileUrl String?
 
   memberId String
