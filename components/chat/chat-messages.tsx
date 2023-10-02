@@ -7,14 +7,10 @@ import { format } from "date-fns";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import ChatWelcome from "./chat-welcome";
 import ChatItem from "./chat-item";
+import { MessageWithMemberWithProfile } from "@/types";
+import { useChatSocket } from "@/hooks/use-chat-socket";
 
 const DATE_FORMAT = "d MMM yyyy, HH::mm";
-
-type MessageWithMemberWithProfile = Message & {
-  member: Member & {
-    profile: Profile;
-  };
-};
 
 interface ChatMessagesProps {
   name: string;
@@ -40,6 +36,8 @@ const ChatMessages = ({
   type,
 }: ChatMessagesProps) => {
   const queryKey = `chat:${chatId}`;
+  const addKey = `chat:${chatId}:messages`;
+  const updateKey = `chat:${chatId}:messages:update`;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
@@ -48,6 +46,12 @@ const ChatMessages = ({
       paramKey,
       paramValue,
     });
+
+  useChatSocket({
+    queryKey,
+    addKey,
+    updateKey,
+  });
 
   if (status === "loading") {
     return (
